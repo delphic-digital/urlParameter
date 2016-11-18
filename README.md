@@ -1,7 +1,8 @@
 # urlParameter
+
 "Pure" utility for playing with URL parameters
 
-https://travis-ci.org/delphic-digital/urlParameter.svg?branch=master
+[![Build Status](https://travis-ci.org/delphic-digital/urlParameter.svg?branch=master)](https://travis-ci.org/delphic-digital/urlParameter)
 
 ##Developing
 

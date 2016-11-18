@@ -17,9 +17,6 @@ speedTest = function(t, fn){
 	t.ok(executionTime < performanceBenchmark, '-- ' + executionTime + 'ms');
 };
 
-//=========================================================================== Single value parameters
-
-
 test('Writing values', function(t){
 
     t.equal(urlParameter.set('test', 'one', ''), '?test=one', 'Add to blank');
@@ -55,11 +52,3 @@ test('Clearing values', function(t){
 	
 	t.end();
 });
-
-
-
-
-//=========================================================================== Multi value parameters
-
-
-//=========================================================================== url encoding

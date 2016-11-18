@@ -1,0 +1,17 @@
+{
+  "name": "url-parameter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "urlParameter.js",
+  "scripts": {
+    "test": "node urlParameter-test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tap-dot": "^1.0.5",
+    "tap-notify": "^1.0.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.2"
+  }
+}

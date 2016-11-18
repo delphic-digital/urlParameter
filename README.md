@@ -1,14 +1,12 @@
 # urlParameter
 "Pure" utility for playing with URL parameters
 
----
+https://travis-ci.org/delphic-digital/urlParameter.svg?branch=master
 
 ##Developing
 
-`npm install`
-`npm test`
-
----
+ - `npm install`
+ - `npm test`
 
 ##Using
 

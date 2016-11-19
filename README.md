@@ -11,7 +11,7 @@
 
 ##Using
 
- - `urlParameter.get(<*parameter-name*:string>, <*query-string*:string>, <*is-encoded*:boolean optional>)` 
+ - `urlParameter.get(<<b>parameter-name</b>:string>, <*query-string*:string>, <*is-encoded*:boolean optional>)` 
 	- Looks in `*query-string*` for the value of parameter-name
 	- If `*is-encoded*`, it will skip encoding parameter-name
  	- Returns a String

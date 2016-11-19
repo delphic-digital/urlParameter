@@ -12,10 +12,10 @@
 ##Using
 
 ```javascript
-urlParameter.get(**parameter-name**:string, <*query-string*:string>, <*is-encoded*:boolean optional>)
+urlParameter.get(<parameter-name:string>, <query-string:string>, <is-encoded:boolean optional>)
 ```
 
-- Looks in *`query-string`* for the value of parameter-name
+- Looks in `query-string` for the value of parameter-name
 - If `*is-encoded*`, it will skip encoding parameter-name
 - Returns a String
 

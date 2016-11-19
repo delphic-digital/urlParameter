@@ -8,28 +8,38 @@ function addToQueryString(queryString, paramName, value){
 		//guess there's nothing there, no need to '&'
 		return '?' + paramName + '=' + value;			
 	}
-}
+} 
 
 function removeQueryFromString(queryString, paramName){
 
 	//find the index of paramName
-	var paramIndex = queryString.indexOf(paramName);
-	if (paramIndex == -1){
+	var startSlice = queryString.indexOf(paramName);
+	if (startSlice == -1){
 		//it's not in there, just return the string
 		return queryString;
 	}
 
-	var startSlice = paramIndex;
 	//find index of the next &
 	var endSlice = queryString.indexOf('&', startSlice);
 	if (endSlice == -1) {
-		endSlice = queryString.length;
+		//it's the last / only one!
+		return queryString.substr(0, startSlice - 1); //-1 to lop of the preceeding "?" if it's the only one or "&" if it's the last one
 	}
 
-	//remove the given param from the url
-	var slicedOut = queryString.substr(0, startSlice) + queryString.substr(endSlice, queryString.length);
-	return slicedOut.replace('&&', '&');
+	if (endSlice < queryString.length) {
+		//we're in the middle, add to end slice so it'll lop off one of the "&"'s
+		endSlice++;
+	}
+
+	//if we're here - the param is one of many - return the slice before & after the param
+	return queryString.substr(0, startSlice) + queryString.substr(endSlice, queryString.length);
 }
+
+function formatStringForUrl(unsafeString){
+	var safeString = unsafeString.replace(/ /g, '%20');
+	return safeString;
+}
+
 
 module.exports = {
 	get: function(key, queryString){
@@ -59,37 +69,27 @@ module.exports = {
 	},
 
 	set: function(paramName, value, queryString){
-		//set adds a query to a given query string and returns the new query string
-		var query = queryString.substring(1);
-		
-		if (paramName.length > 0) {
-			var paramName = paramName.replace(/ /g, '%20');
-
-			var cleanQueryString = removeQueryFromString(query, paramName);
-
-			if (value == "") {
-				//remove the query
-				var newQuery = cleanQueryString;
-			} else {
-				var newQuery = addToQueryString(cleanQueryString, paramName, value);
-			}
-			var returnString = newQuery.replace('&&', '&').replace('??', '?').replace('?&', '?');
-
-			if (returnString[0] == '?') {
-				returnString = returnString.substring(1);
-			}
-
-			if (returnString[0] == '&') {
-				returnString = returnString.substring(1);
-			}
-
-			if (returnString == '') {
-				return returnString;
-			} else {
-				return '?' + returnString;
-			}
-		} else {
-			return virtualLocation.search;
+		if (typeof paramName == 'undefined') {
+			return false;
 		}
+
+		var queryString = removeQueryFromString(queryString, paramName);
+		if (value == "") {
+			return queryString;
+		}
+
+		//param name and value have passed, so format them 
+		var paramName = formatStringForUrl(paramName);
+		var value = formatStringForUrl(value);
+
+		//and return the new string!
+		var newQuery = addToQueryString(queryString, paramName, value);
+		
+		//var returnString = newQuery.replace('&&', '&').replace('??', '?').replace('?&', '?');
+
+
+
+		return newQuery;
+		
 	}
 }

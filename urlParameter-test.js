@@ -8,7 +8,7 @@ test.createStream()
   .pipe(tapSpec())
   .pipe(process.stdout);
 
-const performanceBenchmark = 1000;//ms
+const performanceBenchmark = 20;//ms
 
 speedTest = function(t, fn){
 	var start = new Date();
@@ -34,12 +34,12 @@ test('Writing values', function(t){
 });
 
 test('Reading values', function(t){
-	var result = urlParameter.get('1', '?1=thisvalue');
-	t.equal(result[0], 'thisvalue', 'Get from 1');
-	speedTest(t, () => urlParameter.get('1', '?1=thisvalue') );
+	var result = urlParameter.get('1', '?1=1');
+	t.equal(result, '1', 'Get from 1');
+	speedTest(t, () => urlParameter.get('1', '?1=1') );
 
 	var result = urlParameter.get('1', '?1=1&2=2');
-	t.equal(result[0], '1', 'Get from multiple');
+	t.equal(result, '1', 'Get from multiple');
 	speedTest(t, () => urlParameter.get('1', '', '?1=1&2=2') );
 
 	t.end();

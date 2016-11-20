@@ -36,8 +36,12 @@ function removeQueryFromString(queryString, paramName){
 }
 
 function formatStringForUrl(unsafeString){
-	var safeString = unsafeString.replace(/ /g, '%20');
-	return safeString;
+	//note: I've tried a bunch of alternate methods to replace characters, none have managed to beat the regex.
+	unsafeString = unsafeString.replace(/ /g, '%20');
+	unsafeString = unsafeString.replace(/&/g, '%26');
+	unsafeString = unsafeString.replace(/\//g, '%2F');
+
+	return unsafeString;
 }
 
 module.exports = {
@@ -45,7 +49,7 @@ module.exports = {
 		if (typeof paramName != 'string' || typeof queryString != 'string') {
 			return false;
 		}
-		
+
 		//find the index of paramName
 		var startSlice = queryString.indexOf(paramName);
 		if (startSlice == -1){
@@ -72,10 +76,11 @@ module.exports = {
 		if (value == "") {
 			return queryString;
 		}
-
-		//param name and value have passed, so format them 
-		var paramName = formatStringForUrl(paramName);
-		var value = formatStringForUrl(value);
+		if (!isEncoded) {
+			//param name and value have passed, so format them 
+			var paramName = formatStringForUrl(paramName);
+			var value = formatStringForUrl(value);			
+		}
 
 		//and return the new string!
 		var newQuery = addToQueryString(queryString, paramName, value);

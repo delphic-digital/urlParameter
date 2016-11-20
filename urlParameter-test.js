@@ -8,7 +8,7 @@ test.createStream()
   .pipe(tapSpec())
   .pipe(process.stdout);
 
-const performanceBenchmark = 20;//ms
+const performanceBenchmark = 50;//ms - this may have to change depending on your machien
 
 speedTest = function(t, fn){
 	var start = new Date();
@@ -19,12 +19,12 @@ speedTest = function(t, fn){
 
 test('Writing values', function(t){
 
-    t.equal(urlParameter.set('test', 'one', ''), '?test=one', 'Add to blank');
-    speedTest(t, () => urlParameter.set('test', 'one', '') );
+    t.equal(urlParameter.set('test', 'one', '', true), '?test=one', 'Add to blank');
+    speedTest(t, () => urlParameter.set('test', 'one', '', true) );
 
-    var result = urlParameter.set('1', '1', '?2=2');
+    var result = urlParameter.set('1', '1', '?2=2', true);
     t.ok(result == '?1=1&2=2' || result == '?2=2&1=1', 'Add to existing');
-    speedTest(t, () => urlParameter.set('1', '1', '?2=2') );
+    speedTest(t, () => urlParameter.set('1', '1', '?2=2', true) );
 
 	t.end();
 });
@@ -42,29 +42,41 @@ test('Reading values', function(t){
 });
 
 test('Clearing values', function(t){
-	var result = urlParameter.set('1', '', '?1=1');
+	var result = urlParameter.set('1', '', '?1=1', true);
 	t.equal(result, '', 'Clear from 1');
-	speedTest(t, () => urlParameter.set('1', '', '?1=1') );
+	speedTest(t, () => urlParameter.set('1', '', '?1=1', true) );
 
-	var result = urlParameter.set('1', '', '?1=1&2=2&3=3');
+	var result = urlParameter.set('1', '', '?1=1&2=2&3=3', true);
 	t.equal(result, '?2=2&3=3', 'Clear first of multiple');
-	speedTest(t, () => urlParameter.set('1', '', '?1=1&2=2') );
+	speedTest(t, () => urlParameter.set('1', '', '?1=1&2=2', true) );
 
-	var result = urlParameter.set('2', '', '?1=1&2=2&3=3');
+	var result = urlParameter.set('2', '', '?1=1&2=2&3=3', true);
 	t.equal(result, '?1=1&3=3', 'Clear middle of multiple');
-	speedTest(t, () => urlParameter.set('2', '', '?1=1&2=2&3=3') );
+	speedTest(t, () => urlParameter.set('2', '', '?1=1&2=2&3=3', true) );
 
-	var result = urlParameter.set('3', '', '?1=1&2=2&3=3');
+	var result = urlParameter.set('3', '', '?1=1&2=2&3=3', true);
 	t.equal(result, '?1=1&2=2', 'Clear last of multiple');
-	speedTest(t, () => urlParameter.set('3', '', '?1=1&2=2&3=3') );
+	speedTest(t, () => urlParameter.set('3', '', '?1=1&2=2&3=3', true) );
 	
 	t.end();
 });
 
 test('Encoding values', function(t){
+	var result = urlParameter.set('sp ce', 'sp ce', '', true);
+	t.equal(result, '?sp ce=sp ce', 'Don\'t encode space');
+	speedTest(t, () => urlParameter.set('sp ce', 'sp ce', '', true) );
+
 	var result = urlParameter.set('sp ce', 'sp ce', '');
-	t.equal(result, '?sp%20ce=sp%20ce', 'Encode spaces');
+	t.equal(result, '?sp%20ce=sp%20ce', 'Encode space');
 	speedTest(t, () => urlParameter.set('sp ce', 'sp ce', '') );
+
+	var result = urlParameter.set('s p a c e', 's p a c e', '');
+	t.equal(result, '?s%20p%20a%20c%20e=s%20p%20a%20c%20e', 'Encode multiple spaces');
+	speedTest(t, () => urlParameter.set('s p a c e', 's p a c e', '') );
+
+	var result = urlParameter.set('/', '&', '');
+	t.equal(result, '?%2F=%26', 'Encode multiple values');
+	speedTest(t, () => urlParameter.set('/', '&', '') );
 
 	t.end();
 });

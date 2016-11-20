@@ -40,10 +40,12 @@ function formatStringForUrl(unsafeString){
 	return safeString;
 }
 
-
 module.exports = {
-	get: function(paramName, queryString, isEncoded){
-
+	get(paramName, queryString, isEncoded){
+		if (typeof paramName != 'string' || typeof queryString != 'string') {
+			return false;
+		}
+		
 		//find the index of paramName
 		var startSlice = queryString.indexOf(paramName);
 		if (startSlice == -1){
@@ -61,9 +63,8 @@ module.exports = {
 
 		return queryString.substr(startSlice, endSlice - startSlice); //end slice is index. substr needs length
 	},
-
-	set: function(paramName, value, queryString, isEncoded){
-		if (typeof paramName == 'undefined') {
+	set(paramName, value, queryString, isEncoded){
+		if (typeof paramName != 'string') {
 			return false;
 		}
 
@@ -79,11 +80,6 @@ module.exports = {
 		//and return the new string!
 		var newQuery = addToQueryString(queryString, paramName, value);
 		
-		//var returnString = newQuery.replace('&&', '&').replace('??', '?').replace('?&', '?');
-
-
-
-		return newQuery;
-		
+		return newQuery;		
 	}
 }

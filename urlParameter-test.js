@@ -26,10 +26,6 @@ test('Writing values', function(t){
     t.ok(result == '?1=1&2=2' || result == '?2=2&1=1', 'Add to existing');
     speedTest(t, () => urlParameter.set('1', '1', '?2=2') );
 
-    // var result = urlParameter.set('array', ['1','2'], '');
-    // t.ok(result == '?array=1,2' || result == '?array=2,1', 'Add array to blank');
-    // speedTest(t, () => urlParameter.set('1', '1', '?2=2') );
-
 	t.end();
 });
 
@@ -65,9 +61,25 @@ test('Clearing values', function(t){
 	t.end();
 });
 
+test('Encoding values', function(t){
+	var result = urlParameter.set('sp ce', 'sp ce', '');
+	t.equal(result, '?sp%20ce=sp%20ce', 'Encode spaces');
+	speedTest(t, () => urlParameter.set('sp ce', 'sp ce', '') );
+
+	t.end();
+});
+
 test('Should fail', function(t){
-	//passing in 
-	t.notOk(urlParameter.set());
+	
+	t.notOk(urlParameter.set(), 'Set with no args');
+	t.notOk(urlParameter.set(null, null, null, null), 'Set with nulls');
+	t.notOk(urlParameter.set(undefined, undefined, undefined, undefined), 'Set with undefineds');
+	t.notOk(urlParameter.set({}, {}, {}, {}), 'Set with empty objects');
+
+	t.notOk(urlParameter.get(), 'Get with no args');
+	t.notOk(urlParameter.get(null, null, null, null), 'Get with nulls');
+	t.notOk(urlParameter.get(undefined, undefined, undefined, undefined), 'Get with undefineds');
+	t.notOk(urlParameter.get({}, {}, {}, {}), 'Get with empty objects');
 
 	t.end();
 });

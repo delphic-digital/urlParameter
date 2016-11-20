@@ -42,33 +42,27 @@ function formatStringForUrl(unsafeString){
 
 
 module.exports = {
-	get: function(key, queryString){
-		//Get returns an array of values from the passed in string
-		//find the key in here and return it's value
-		var queryString = decodeURI(queryString.substr(1));
+	get: function(paramName, queryString, isEncoded){
 
-		try {
-			var paramArray = queryString.split('&');
-			
-			for (var i = 0; i < paramArray.length; i++) {
-				var keyValuePair = paramArray[i].split('=');
-				//[0] will now be the filter name, [1] will be a string of all it's values
-				if (keyValuePair[0] == key) {
-					if (keyValuePair.length > 1) {
-						return keyValuePair[1].split(',');
-					} else {
-						console.log('empty url parameter: ', keyValuePair);
-					}
-				}
-			}
-		}
-		catch(err) {
-			console.error('urlParam err: ', err);
+		//find the index of paramName
+		var startSlice = queryString.indexOf(paramName);
+		if (startSlice == -1){
+			//it's not in there, return false
 			return false;
 		}
+		startSlice = startSlice + paramName.length + 1;//start slice for the actual value. Param name + "="
+
+		//find index of the next &
+		var endSlice = queryString.indexOf('&', startSlice);
+		if (endSlice == -1) {
+			//it's the last / only one!
+			return queryString.substr(startSlice, queryString.length);
+		}
+
+		return queryString.substr(startSlice, endSlice - startSlice); //end slice is index. substr needs length
 	},
 
-	set: function(paramName, value, queryString){
+	set: function(paramName, value, queryString, isEncoded){
 		if (typeof paramName == 'undefined') {
 			return false;
 		}

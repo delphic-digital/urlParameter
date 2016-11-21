@@ -1,6 +1,6 @@
 //using tape to test: here's an articel I read through before doing this: https://ponyfoo.com/articles/testing-javascript-modules-with-tape
 const test = require('tape');
-const urlParameter = require('./urlParameter');
+const urlParameter = require('./urlParameterHandler');
 
 var tapSpec = require('tap-spec');
 
@@ -25,9 +25,6 @@ test('Writing values', function(t){
     var result = urlParameter.set('1', '1', '?2=2', true);
     t.ok(result == '?1=1&2=2' || result == '?2=2&1=1', 'Add to existing');
     speedTest(t, () => urlParameter.set('1', '1', '?2=2', true) );
-
-    t.equal(urlParameter.set('1', '2', '?1=1', true), '?1=2', 'Overwrite existing');
-    speedTest(t, () => urlParameter.set('1', '2', '?1=1', true) );
 
 	t.end();
 });

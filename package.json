@@ -4,7 +4,8 @@
   "description": "",
   "main": "urlParameter.js",
   "scripts": {
-    "test": "node urlParameter-test.js"
+    "test": "node urlParameter-test.js",
+    "test:handler": "node urlParameterHandler-test.js"
   },
   "author": "",
   "license": "ISC",

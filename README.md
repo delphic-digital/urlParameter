@@ -35,3 +35,26 @@ urlParameter.set(<parameter-name:string>, <parameter-value:string>, <query-strin
 - If `parameter-name` is already set, it'll be overwritten
 - If `is-encoded` it'll skip encoding `parameter-name` and `parameter-value`
 - Returns a String
+
+##urlParameterHandler
+
+*Problem:*  
+A bunch of different components want to update the url parameters.  
+But they don't know about each other.  
+They add, they remove, they do it at crazy times.  
+So we get a long flase history of url changes.
+
+*Solution:*  
+Hold a 'virtual' query string.  
+Let the various components update it as much as they want - go mad.  
+With every change, try to push it to history but ... debounce it :D  
+
+It has almost the same interface as the urlParameter component, but without `query-string`. The whole point of this componenet is to handle the string for you. It also requires `window.history` to be available in the global namespace. So this is not a "pure" function, which seemed a good enough reason to split it out from `urlParameter`. I hope you'll agree!
+
+```javascript
+urlParameterHandler.get(<parameter-name:string>, <is-encoded:boolean optional>);
+```
+
+```javascript
+urlParameterHandler.set(<parameter-name:string>, <parameter-value:string>, <is-encoded:boolean optional>);
+```

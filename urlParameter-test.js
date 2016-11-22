@@ -29,6 +29,9 @@ test('Writing values', function(t){
     t.equal(urlParameter.set('1', '2', '?1=1', true), '?1=2', 'Overwrite existing');
     speedTest(t, () => urlParameter.set('1', '2', '?1=1', true) );
 
+    t.equal(urlParameter.set('abc', '1', '?abcdefg=1', true), '?abcdefg=1&abc=1', 'Add similar param names');
+    speedTest(t, () => urlParameter.set('abc', '1', '?abcdefg=1', true) );
+
 	t.end();
 });
 

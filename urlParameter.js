@@ -12,12 +12,21 @@ function addToQueryString(queryString, paramName, value){
 
 function removeQueryFromString(queryString, paramName){
 
-	//find the index of paramName
-	var startSlice = queryString.indexOf(paramName);
+	//find the index of paramName (note that the param name could be a substring of another param name)
+	var startSlice = queryString.indexOf('?' + paramName + '='); //include the "?" and "=" to help negate the substring problem
 	if (startSlice == -1){
-		//it's not in there, just return the string
-		return queryString;
+		//it's not the first param, but it could be further along
+		var startSlice = queryString.indexOf('&' + paramName + '=');
+		if (startSlice == -1){
+			//it's not there either, just return the string
+			return queryString;
+		}
 	}
+	
+	//shift the index of the start slice along past the '?' or '&'
+	startSlice++;
+	
+
 
 	//find index of the next &
 	var endSlice = queryString.indexOf('&', startSlice);

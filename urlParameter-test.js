@@ -19,6 +19,8 @@ speedTest = function(t, fn){
 
 test('Writing values', function(t){
 
+	t.equal(true, false, 'protected branch status check test');
+
     t.equal(urlParameter.set('test', 'one', '', true), '?test=one', 'Add to blank');
     speedTest(t, () => urlParameter.set('test', 'one', '', true) );
 

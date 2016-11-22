@@ -20,7 +20,7 @@ Note, for both functions below `query-string` should always be encoded. If you p
 ###Get a value from a query string
 
 ```javascript
-urlParameter.get(<parameter-name:string>, <query-string:string>, <is-encoded:boolean optional>)
+var value = urlParameter.get(<parameter-name:string>, <query-string:string>, <is-encoded:boolean optional>)
 ```
 
 - Looks in `query-string` for the value of parameter-name
@@ -30,7 +30,7 @@ urlParameter.get(<parameter-name:string>, <query-string:string>, <is-encoded:boo
 ###Set a value in a query string
 
 ```javascript
-urlParameter.set(<parameter-name:string>, <parameter-value:string>, <query-string:string>, <is-encoded:boolean optional>)
+var newQueryString = urlParameter.set(<parameter-name:string>, <parameter-value:string>, <query-string:string>, <is-encoded:boolean optional>)
 ```
 
 - Adds `"parameter-name=parameter-value"` to `query-string` 
@@ -54,9 +54,15 @@ With every change, try to push it to history but ... debounce it :D
 It has almost the same interface as the urlParameter component, but without `query-string`. The whole point of this componenet is to handle the string for you. It also requires `window.history` to be available in the global namespace. So this is not a "pure" function, which seemed a good enough reason to split it out from `urlParameter`. I hope you'll agree!
 
 ```javascript
-urlParameterHandler.get(<parameter-name:string>, <is-encoded:boolean optional>);
+var value = urlParameterHandler.get(<parameter-name:string>, <is-encoded:boolean optional>);
 ```
 
 ```javascript
-urlParameterHandler.set(<parameter-name:string>, <parameter-value:string>, <is-encoded:boolean optional>);
+var newQueryString = urlParameterHandler.set(<parameter-name:string>, <parameter-value:string>, <is-encoded:boolean optional>);
+//...
+//...
+//...
+// and window.location will update!
 ```
+
+There's more, checkout the tests to see what else you can do with it.

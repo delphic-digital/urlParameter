@@ -1,8 +1,10 @@
 # urlParameter
 
-"Pure" utility for playing with URL parameters
+A "Pure" utility for playing with URL parameters.
 
 [![Build Status](https://travis-ci.org/delphic-digital/urlParameter.svg?branch=master)](https://travis-ci.org/delphic-digital/urlParameter)
+
+Pluck it from urlParameter.js and drop it whereveer you need it. It's not holy and untouchable! The tests and handler files are just icing.
 
 ##Developing
 

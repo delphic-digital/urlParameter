@@ -5,8 +5,8 @@
   "main": "urlParameter.js",
   "scripts": {
     "test": "npm run test:pure && npm run test:state",
-      "test:pure": "node urlParameter-test.js",
-      "test:state": "node urlParameterHandler-test.js"
+    "test:pure": "node urlParameter-test.js",
+    "test:state": "node urlParameterHandler-test.js"
   },
   "author": "",
   "license": "ISC",

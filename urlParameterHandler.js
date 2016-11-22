@@ -14,7 +14,15 @@
 
 const urlParameter = require('./urlParameter');
 var virtualQueryString = '';
+var liveQueryString = '';
+var debounceTime = 500;
+if (typeof window != 'undefined'){
+	var windowRef = window;
+	virtualQueryString = windowRef.location.search;
+	virtualQueryString = windowRef.location.search;
+}
 
+//Replace me with an import if you have debounce already!
 function debounce(func, wait, immediate) {
 	var timeout;
 	return function() {
@@ -35,25 +43,41 @@ function debounce(func, wait, immediate) {
 	};
 };
 
-var setHistroy = debounce(function(){
-	if (typeof window != 'undefined'){
-		if (window.history) {
-			history.pushState(null, '', window.pathname + virtualQueryString);
+var setHistroy = function(){
+	if (typeof windowRef != 'undefined'){
+		if (windowRef.history) {
+			windowRef.history.pushState(null, '', windowRef.pathname + virtualQueryString);
+			liveQueryString = virtualQueryString;
 		} else {
 			console.log('No window.history :(');
 		}
 	} else {
 		console.log('No window to set histroy on :(');
 	}
-}, 500);
+};
+
+var updateUrl = debounce(setHistroy, debounceTime);
 
 module.exports = {
 	get(paramName, isEncoded){
 		return urlParameter.get(paramName, virtualQueryString, isEncoded);
 	},
 	set(paramName, value, isEncoded){
-		virtualQueryString = urlParameter.set(paramName, value, virtualQueryString, isEncoded);
-		setHistroy();
-		return virtualQueryString;
+
+		var newQueryString = urlParameter.set(paramName, value, virtualQueryString, isEncoded);
+
+		virtualQueryString = newQueryString;
+		updateUrl();
+
+		return newQueryString;
+	},
+	config(options){
+		if (options.hasOwnProperty('debounce')) { debounce = options.debounce; };
+		if (options.hasOwnProperty('debounceTime')) { debounceTime = options.debounceTime; };
+		if (options.hasOwnProperty('windowReplacement')) { windowRef = options.windowReplacement; };
+		return true; //return false for err?
+	},
+	getLiveQueryString(){
+		return liveQueryString;
 	}
 }

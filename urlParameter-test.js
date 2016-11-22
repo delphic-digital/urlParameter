@@ -88,7 +88,7 @@ test('Encoding values', function(t){
 });
 
 test('Should fail', function(t){
-	
+
 	t.notOk(urlParameter.set(), 'Set with no args');
 	t.notOk(urlParameter.set(null, null, null, null), 'Set with nulls');
 	t.notOk(urlParameter.set(undefined, undefined, undefined, undefined), 'Set with undefineds');

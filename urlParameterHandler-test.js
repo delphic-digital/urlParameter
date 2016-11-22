@@ -8,80 +8,45 @@ test.createStream()
   .pipe(tapSpec())
   .pipe(process.stdout);
 
-const performanceBenchmark = 50;//ms - this may have to change depending on your machien
+test('The Handler: writing values', function(t){
+	//queryString = ''
+    
+    t.equal(urlParameter.set('1', '1', true), '?1=1', 'Add to blank');
 
-speedTest = function(t, fn){
-	var start = new Date();
-	for (var i = 0; i < 10000; i++) { fn(); }
-	var executionTime = new Date() - start;
-	t.ok(executionTime < performanceBenchmark, '-- ' + executionTime + 'ms');
-};
+    //queryString = '?1=1'
+    
+    t.equal(urlParameter.set('2', '2', true), '?1=1&2=2', 'Add to existing');
 
-test('Writing values', function(t){
-
-    t.equal(urlParameter.set('test', 'one', '', true), '?test=one', 'Add to blank');
-    speedTest(t, () => urlParameter.set('test', 'one', '', true) );
-
-    var result = urlParameter.set('1', '1', '?2=2', true);
-    t.ok(result == '?1=1&2=2' || result == '?2=2&1=1', 'Add to existing');
-    speedTest(t, () => urlParameter.set('1', '1', '?2=2', true) );
+    //query string = '?1=1&2=2'
 
 	t.end();
 });
 
-test('Reading values', function(t){
-	var result = urlParameter.get('1', '?1=1');
-	t.equal(result, '1', 'Get from 1');
-	speedTest(t, () => urlParameter.get('1', '?1=1') );
+test('The Handler: reading values', function(t){
 
-	var result = urlParameter.get('1', '?1=1&2=2');
-	t.equal(result, '1', 'Get from multiple');
-	speedTest(t, () => urlParameter.get('1', '', '?1=1&2=2') );
+	t.equal(urlParameter.get('1', true), '1', 'Get from 1');
 
 	t.end();
 });
 
-test('Clearing values', function(t){
-	var result = urlParameter.set('1', '', '?1=1', true);
-	t.equal(result, '', 'Clear from 1');
-	speedTest(t, () => urlParameter.set('1', '', '?1=1', true) );
+test('The Handler: clearing values', function(t){
 
-	var result = urlParameter.set('1', '', '?1=1&2=2&3=3', true);
-	t.equal(result, '?2=2&3=3', 'Clear first of multiple');
-	speedTest(t, () => urlParameter.set('1', '', '?1=1&2=2', true) );
+	//query string still = '?1=1&2=2'	
+	
+	t.equal(urlParameter.set('1', '', true), '?2=2', 'Clear from multiple');
 
-	var result = urlParameter.set('2', '', '?1=1&2=2&3=3', true);
-	t.equal(result, '?1=1&3=3', 'Clear middle of multiple');
-	speedTest(t, () => urlParameter.set('2', '', '?1=1&2=2&3=3', true) );
+	//query string = '?2=2'	
 
-	var result = urlParameter.set('3', '', '?1=1&2=2&3=3', true);
-	t.equal(result, '?1=1&2=2', 'Clear last of multiple');
-	speedTest(t, () => urlParameter.set('3', '', '?1=1&2=2&3=3', true) );
+	t.equal(urlParameter.set('2', '', true), '', 'Clear 1');
+
+	//query string = ''	
 	
 	t.end();
 });
 
-test('Encoding values', function(t){
-	var result = urlParameter.set('sp ce', 'sp ce', '', true);
-	t.equal(result, '?sp ce=sp ce', 'Don\'t encode space');
-	speedTest(t, () => urlParameter.set('sp ce', 'sp ce', '', true) );
 
-	var result = urlParameter.set('sp ce', 'sp ce', '');
-	t.equal(result, '?sp%20ce=sp%20ce', 'Encode space');
-	speedTest(t, () => urlParameter.set('sp ce', 'sp ce', '') );
 
-	var result = urlParameter.set('s p a c e', 's p a c e', '');
-	t.equal(result, '?s%20p%20a%20c%20e=s%20p%20a%20c%20e', 'Encode multiple spaces');
-	speedTest(t, () => urlParameter.set('s p a c e', 's p a c e', '') );
-
-	var result = urlParameter.set('/', '&', '');
-	t.equal(result, '?%2F=%26', 'Encode multiple values');
-	speedTest(t, () => urlParameter.set('/', '&', '') );
-
-	t.end();
-});
-
-test('Should fail', function(t){
+test('The Handler: should fail', function(t){
 	
 	t.notOk(urlParameter.set(), 'Set with no args');
 	t.notOk(urlParameter.set(null, null, null, null), 'Set with nulls');
